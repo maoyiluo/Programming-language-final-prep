@@ -45,19 +45,55 @@
   9. prove that plus 1 2 = 3. plus m n =λ m n. m succ n.  succ = λ n s z. s(n s z)
   <details>
   <summary>answer</summary>
-  <p>
-  ```c#
-   plus 1 2 = 1 succ 2 = succ 2 = (λ n s z. s (n s z)) 2 = λ s z. s( 2 s z) = λ s z. s ( (λ s z. s (s z)) s z)  = λ s z. s (s (s z)) = 3
+    
   ```
-  </p>
+   plus 1 2 
+   = 1 succ 2 
+   = succ 2 
+   = (λ n s z. s (n s z)) 2 
+   = λ s z. s( 2 s z) 
+   = λ s z. s ( (λ s z. s (s z)) s z)  
+   = λ s z. s (s (s z)) = 3
+  ```
 </details>
   10. prove that exp 2 2 = 4. exp m n = λ m n. n m.
   <details>
   <summary>answer</summary>
-  exp 2 2 = (λ m n. n m) 2 2 = (λ n. n 2) 2 = 2 2 = (λ s z. s(s (z)) 2 = λ z. 2 (2 (z) ) = λ z. 2 ((λ s z. s(s(z))) z) =λ s. 2 ((λ s z. s(s(z))) s) = λ s. 2 (λ  z. s(s(z)))  = λ s. (λ s z. s(s(z))) (λ  z. s(s(z))) =  λ s. λ z. (λ  z. s(s(z)) (λ  z. s(s(z)) z) = λ s. λ z. (λ  z. s(s(z)) s(s(z) )  = λ s z. s(s(s(s(z)) = 4.
+  
+  ```
+  exp 2 2 = (λ m n. n m) 2 2 
+  = (λ n. n 2) 2 = 2 2 
+  = (λ s z. s(s (z)) 2 
+  = λ z. 2 (2 (z)) 
+  = λ z. 2 ((λ s z. s(s(z))) z) 
+  = λ s. 2 ((λ s z. s(s(z))) s) 
+  = λ s. 2 (λ  z. s(s(z)))  
+  = λ s. (λ s z. s(s(z))) (λ  z. s(s(z))) 
+  =  λ s. λ z. (λ  z. s(s(z)) (λ  z. s(s(z)) z) 
+  = λ s. λ z. (λ  z. s(s(z)) s(s(z) )  
+  = λ s z. s(s(s(s(z)) = 4.
+  ```
 </details>
   11. prove that pred 1 = 0
   <details>
   <summary>answer</summary>
-  pred 1 = snd (1 (λ p. pair( succ (fst p))(fst p))(pair 0 0)) = (λp. p false)
+  
+  ```
+  pred 1 
+  = snd (1 (λ p. pair( succ (fst p))(fst p))(pair 0 0)) 
+  = (λp. p false)((λ s z. s z) (λ p. pair( succ (fst p))(fst p))(pair 0 0))
+  = (λp. p false)((λ p. pair(succ (fst p))(fst p)) (pair 0 0))
+  = (λp. p false)((λ p. (λ x y b. b x y)(succ (fst p))(fst p)) (pair 0 0))
+  = (λp. p false)((λ p. λb. b(succ (fst p))(fst p)) (pair 0 0))
+  = (λp. p false)((λ p. λb. b (succ (fst p))(fst p)) (λ z. z 0 0))
+  = (λp. p false)((λ p. λb. b (succ ((λy. y true) p))((λy. y true) p)) (λ z. z 0 0))
+  = (λp. p false)((λ p. λb. b (succ ((λy. y true) p))((λy. y true) p)) (λ z. z 0 0))
+  = (λp. p false)((λ p. λb. b (succ (p true))(p true)) (λ z. z 0 0))
+  = (λp. p false)((λ p. λb. b ((λ n s z. s(n s z)) (p true))(p true)) (λ z. z 0 0))
+  = (λp. p false)((λ p. λb. b ((λs z. s((p true) s z)))(p true)) (λ z. z 0 0))
+  = (λp. p false)(λb. b ((λs z. s(0 s z))) 0)
+  = (λp. p false)(λb. b 1 0)
+  = (λb. b 1 0) false
+  = 0
+  ```
 </details>
