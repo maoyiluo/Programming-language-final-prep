@@ -45,9 +45,11 @@
   9. prove that plus 1 2 = 3. plus m n =λ m n. m succ n.  succ = λ n s z. s(n s z)
   <details>
   <summary>answer</summary>
+  <p>
   ```c#
    plus 1 2 = 1 succ 2 = succ 2 = (λ n s z. s (n s z)) 2 = λ s z. s( 2 s z) = λ s z. s ( (λ s z. s (s z)) s z)  = λ s z. s (s (s z)) = 3
   ```
+  </p>
 </details>
   10. prove that exp 2 2 = 4. exp m n = λ m n. n m.
   <details>
