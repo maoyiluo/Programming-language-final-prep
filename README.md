@@ -1,12 +1,12 @@
 # Programming-language-final-prep
 
 ## Lambda expression
-  1. Is arrow left associative or right associative? f->y->x
-<details>
-  <summary>answer</summary>
-   arrow is **right associative**. 
-   To understand it, let see f->(y->x). It means this function takes a parameter f, and return a function that takes a parameter y and return x. It's easier to understand it by this example. let f x y = x. The type of f is x->y->x. Then the type f x: y->x. That's exactly what happen when x->(y->x).
-</details>
+ 1. Is arrow left associative or right associative? f->y->x
+  <details>
+   <summary>answer</summary>
+    arrow is **right associative**. 
+    To understand it, let see f->(y->x). It means this function takes a parameter f, and return a function that takes a parameter y and return x. It's easier to understand it by this example. let f x y = x. The type of f is x->y->x. Then the type f x: y->x. That's exactly what happen when x->(y->x).
+  </details>
   2. Is application left associative or right associative? f x y
 <details>
   <summary>answer</summary>
@@ -97,3 +97,38 @@
   = 0
   ```
 </details>
+
+## generic type
+
+1. What is scala generics? How to implement？
+  <details>
+    <summary>answer</summary>
+      generics is that a class can take a type as parameter. To implement it in scala, use [A]:
+
+      class Queue[A] private (private val queue: List[A]) {
+       def enqueue(x: A): Queue[A] = new Queue[A](queue :+ x)
+
+       def dequeue: (A, Queue[A]) = {
+        require(!isEmpty, "Queue.dequeue on empty queue")
+        val x :: queue1 = queue(x, new Queue(queue1))
+        }
+
+     def isEmpty: Boolean = queue.isEmpty
+
+      override def toString: String = {s"Queue${queue.toString.drop(4)}}
+      }
+  </details>
+2. What is the three types of relationship between the generics of super class and subclass? If `T <: S`, what is the relationship between `C[T]` and `C[S]`?
+  <details>
+  <summary>answer</summary>
+      There are three types of relationship:
+        -covariant:`C[T] <: C[S]`
+        -contravariant: `C[T] :> C[S]`
+        -invariant: no specific relationship between these two classes. ***Default***
+  </details>
+ 3. 
+
+
+
+## memory management
+
