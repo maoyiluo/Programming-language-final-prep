@@ -232,3 +232,45 @@ p b = a; //copy constructor
  2. shallow copy or deep copy
  - for shallow copy, we create a reference to the existance object. **Only one object on the heap**
  - for deep copy, we create a exactly the same object on the heap. **Two object on the heap**
+ 
+ 3. constructor of smart pointer
+ the field of smart pointer
+ ```
+ class Ptr {
+  T* addr; // pointer to referenced object
+  size_t* counter; // pointer to counter shared by all Ptrs that point to addr.
+ ```
+ so we have two things, first is the pointero of T, and second is the pointer to counter.
+ - constructor:
+ ```c++
+ Ptr(T* _addr = 0) : addr(_addr), counter(new size_t(1)) {}
+ ```
+ Nothing special, counter is set to 1.
+ - copy constructor:
+ ```
+ Ptr(const Ptr<T>& other) : addr(other.addr), counter(other.counter) {
+  ++(*counter);
+}
+```
+It's a shallow copy, we create a new object on the stack and point it to the same place as other, then increase the counter.
+- assignment:
+```
+Ptr& operator=(const Ptr& right) {
+  if (addr != right.addr) {
+    if (0 == --(*counter)) { //reduce the counter for the previous object.
+      delete addr;
+      delete counter;
+    }
+    addr = right.addr; 
+    counter = right.counter;
+    ++(*counter);            //increase the countor for current object.
+  }
+  return *this;
+}
+```
+We avoid self pointing. Thing will go wrong when we have self pointing, see the code below:
+```
+Ptr<B> a = 0; 
+a = a;
+```
+If we allow self pointing, `a = a` will increase the `counter` to 2. But when this stack frame pops out, we will only call the destructor one time, because we only have one object `a` on the stack. We won't reclaim the heap space because the `counter = 1`.  
