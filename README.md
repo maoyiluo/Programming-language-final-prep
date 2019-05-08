@@ -186,7 +186,7 @@ c2.method2(1) //OK at complie time because integer is Anytype.
 ```
 This time when we override method 2 we have to set the same constraint on U. Therefore this time complier will detect that we are calling something that only the avalible in String but we only know U is String or its supertype, so it finds the error.
 Here is the example that why the `ContraVar` is wrong:
-```
+```scala
 class ContraVar[-T](x: T) {
   def method1: T = x
   def method2(y: T): List[T] = List(x,y)
@@ -197,7 +197,7 @@ val c2:ContraVar[String] = c1 //OK because Any >: String so ContraVar[Any] <: Co
 c2.method1().length // here T = String, so it should be ok at compile time
 ```
 It's clear that it will crash at runtime.
-```
+```scala
 class ContraVar[-T,U>:T](x: T) {
   def method1: U = x
   def method2(y: T): List[T] = List(x,y)
