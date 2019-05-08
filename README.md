@@ -136,7 +136,7 @@
 </details>
 
 4. here are some examples to explain why sometimes covariant or contravariant will go wrong.
-First of all, our goal is to ***let the compiler find the error at compiling time.***
+First of all, our goal is to **let the compiler find the error at compiling time.**
 ```scala
 class CoVar[+T](x: T) {
   def method1: T = x
@@ -207,5 +207,24 @@ val c1 = new ContraVar[Any,Any](1)
 val c2:ContraVar[String,Any] = c1 // U has to be a supertype of String so I set it to Any.
 c2.method1().length // compiler will find it's wrong because we are asking for length at a object with type Any!
 ```
-## memory management
+5. the **involuted** upper bound and lower bound
+First of all I claim these two statement:
+- `covariant` promise a `upper bound` return type. The return type m should be the type T itself or T's subtype.
+- `contravariant` promise a `lower bound` input type. The input type m should be the type T or T's subtype.  
 
+It's really confusing to see that we are using different word to describe the same thing: type m should be type T or T's subtype. So here is my personal understanding, I can't guarantee that it's correct but it can somehow help me to remember these two statement.
+
+we know that for `covariant`, if `T <: S`, then `C[T] <: C[S]`. Therefore if `m <: T`, then `C[m]<:C[T]`. This should somehow explain why it's the `upper bound`. For `contravariant`, if `m<:T`, then `C[m]>:C[T]`. That's why we call it `lower bound`.
+## memory management
+1. clarify some definition:
+- constructor: Just constructor, nothing special
+- Copy construtor: When we declare a new variable, if we are using this way `p e = q`, then we are calling a copy constructor.
+- assignment: This operation is for two variable that **has been declared** like 
+ ```c++
+ p a;
+ p b;
+ a = b; //assginment
+ ```
+ 2. shallow copy or deep copy
+ - for shallow copy, we create a reference to the existance object. **Only one object on the heap**
+ - for deep copy, we create a exactly the same object on the heap. **Two object on the heap**
