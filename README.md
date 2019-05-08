@@ -219,7 +219,7 @@ we know that for `covariant`, if `T <: S`, then `C[T] <: C[S]`. Therefore if `m 
 1. clarify some definition:
 - constructor: Just constructor, nothing special
 - Copy construtor: When we declare a new variable, if we are using this way `p e = q`, then we are calling a copy constructor.
-```
+```c++
 p a;
 p b = a; //copy constructor
 ```
