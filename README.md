@@ -200,7 +200,7 @@ It's clear that it will crash at runtime.
 ```scala
 class ContraVar[-T,U>:T](x: T) {
   def method1: U = x
-  def method2(y: T): List[T] = List(x,y)
+  def method2(y: T): List[U] = List(x,y)
 }
 
 val c1 = new ContraVar[Any,Any](1)
