@@ -104,7 +104,7 @@
   <details>
     <summary>answer</summary>
       generics is that a class can take a type as parameter. To implement it in scala, use [A]:
-
+      
       class Queue[A] private (private val queue: List[A]) {
        def enqueue(x: A): Queue[A] = new Queue[A](queue :+ x)
 
@@ -122,13 +122,68 @@
   <details>
   <summary>answer</summary>
       There are three types of relationship:
-        -covariant:`C[T] <: C[S]`
-        -contravariant: `C[T] :> C[S]`
-        -invariant: no specific relationship between these two classes. ***Default***
+        - covariant:`C[T] <: C[S]`
+        - contravariant: `C[T] :> C[S]`
+        - invariant: no specific relationship between these two classes. ***Default***
   </details>
- 3. 
+3. How to make a generics type covariant or contravariant?
+<details>
+		<summary>answer</summary>
+				
+    class generics[+A]: covariant
+    class generics[-A]: contravariant
+				
+</details>
 
+4. here are some examples to explain why sometimes covariant or contravariant will go wrong.
+First of all, our goal is to let the compiler find the error at compiling time.
+```scala
+class CoVar[+T](x: T) {
+  def method1: T = x
+  def method2(y: T): List[T] = List(x,y)
+}
 
+class ContraVar[-T](x: T) {
+  def method1: T = x
+  def method2(y: T): List[T] = List(x,y)
+}
+```
+So we can see that there has some error in the definition of these two class. `CoVar` has a parameter `y:T` at the contravariant position, and `ContraVar` returns `T` at a covariant positon. Here is the code to show how it can go wrong:
+```scala
+class CoVar[+T](x: T) {
+  def method1: T = x
+  def method2(y: T): List[T] = List(x,y)
+}
 
+class C extend CoVar[String]{
+  overrided method2(y: String): List[String] = {
+   println(y.length)
+   List[String] = List(x,y)
+  }
+}
+
+val c1 = new C("hello")
+val c2:CoVar[Any] = c1 //Ok because CoVar[Any] >: CoVar[String] >: C
+c2.method2(1) //OK at complie time because integer is Anytype.
+```
+But the program will crash at runtime because c2.method2 will be dynamic dispatched to the method2 in `C`, and it tries to get the length of an integer. To solve this problem(I mean we hope compiler can detect the error) we have to add some constraints to the parameter of method2:
+```scala
+class CoVar[+T](x: T) {
+  def method1: T = x
+  def method2[U>:T](y: U): List[T] = List(x,y)
+}
+
+class C extend CoVar[String]{
+  overrided method2[U>:String](y: U): List[U] = {
+   println(y.length) //compiler will find  that this line has error.
+   List[U] = List(x,y)
+  }
+}
+
+val c1 = new C("hello")
+val c2:CoVar[Any] = c1 //Ok because CoVar[Any] >: CoVar[String] >: C
+c2.method2(1) //OK at complie time because integer is Anytype.
+```
+This time when we override method 2 we have to set the same constraint on U. Therefore this time complier will detect that we are calling something that only the avalible in String but we only know U is String or its supertype, so it finds the error.
 ## memory management
 
